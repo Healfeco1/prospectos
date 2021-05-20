@@ -21,4 +21,4 @@ firebase.analytics();
 
 firebase.auth();
 
-export default { firebase};
+export default {firebase};

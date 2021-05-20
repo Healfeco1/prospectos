@@ -1,35 +1,90 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import Prospectos from '../../Prospectos/Prospectos';
 import { ToastProvider } from 'react-toast-notifications';
 import { DefaultToastContainer } from 'react-toast-notifications';
+import Button from 'react-bootstrap/Button'
+import ModalBody from 'react-bootstrap/ModalBody'
+import ModalFooter from 'react-bootstrap/ModalFooter'
+import Modal from 'react-bootstrap/Modal'
+import Swal from 'sweetalert2'
+
+import './styles.css'
+import { prospectProviders } from '../../../Firebase/ProspectosProvider';
 
 // Modificando la propiedad zindex para que muestre la alerta frente al modal
 export const MyCustomToastContainer = props => (
   <DefaultToastContainer {...props} style={{ zIndex: 9999 }} />
 );
 
-export default function Modal({ idProspecto }) {
+export default function Modals({ idProspecto, setidProspecto}) {
+  const {handleShowModal,sethandleShowModal} = useContext(prospectProviders)
+  const [show, setShow] = useState(false);
+  const handleClose = () => {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        cancelButton: 'btn btn-success',
+        confirmButton: 'btn btn-danger mr-2'
+      },
+      buttonsStyling: false
+    })
+
+    swalWithBootstrapButtons.fire({
+      title: 'Saldrá de la pantalla de captura de prospectos y ningún dato será guardado',
+      text: 'Si sale perderá toda la captura.',
+      icon: 'warning',
+      showClass: {
+        popup: 'animate__animated animate__fadeInDown'
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Salir',
+      cancelButtonText: 'Seguir editando',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // setShow(false)
+        sethandleShowModal(false)
+        setidProspecto(null)
+      }
+    })
+  };
+  const handleShow = () => {
+    // setShow(true)
+    sethandleShowModal(true)
+  };
   return (
     <>
-      <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Open modal for @mdo</button>
-
-      <div className="modal fade" id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog modal-xl" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">New message</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <ToastProvider components={{ ToastContainer: MyCustomToastContainer }}>
-                <Prospectos idProspecto={idProspecto} />
-              </ToastProvider>
-            </div>
-          </div>
-        </div>
+      <div className="text-center">
+        <Button variant="outline-success" onClick={handleShow}>Capturar Prospecto</Button>
       </div>
+
+      <Modal
+        // show={show}
+        show={handleShowModal}
+        onHide={() => {
+          // setShow(false); 
+          sethandleShowModal(false); 
+          setidProspecto(null)
+          }}
+        dialogClassName="mod"
+        aria-labelledby="example-custom-modal-styling-title"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ToastProvider components={{ ToastContainer: MyCustomToastContainer }}>
+            <Prospectos idProspecto={idProspecto} 
+            // setShow={setShow} 
+            sethandleShowModal={sethandleShowModal}
+            
+            />
+          </ToastProvider>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>Close</Button>
+          <Button variant="primary" onClick={handleClose}>Save Changes</Button>
+        </Modal.Footer>
+      </Modal>
+      <span>{(idProspecto) ? idProspecto : ''}</span>
     </>
   )
 }

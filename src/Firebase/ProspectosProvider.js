@@ -1,35 +1,50 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 // intermediario entre firebase y componentes
-import {methods} from './methods'
+import { methods } from './methods'
 import firebase from 'firebase'
 
 
-
 export default function ProspectosProvider(props) {
-    const [prospectos, setData] = useState({})
+  const [prospectos, setData] = useState([])
+  const [handleShowModal, sethandleShowModal] = useState(false);
+  let resProspectos = []
+  const getAllProspects = () => {
+    methods.prospectos(setData);
+  }
+  useEffect(() => {
+    getAllProspects()
+  }, []);
 
-    useEffect(() => {
-        const db = firebase.firestore();
-        return db.collection('prospectos').onSnapshot((snapshot) => {
-          // const postData = [];
-          // snapshot.forEach((doc) => postData.push({  id: doc.id, ...doc.data() }));
-          // setData(postData);
-        });
-      }, []);
-    const getAllProspects = () => {
-      methods.getAllProspectos(setData);
-    }
-    return (
-        <prospectProviders.Provider
-            value={{
-              getAllProspects,
-                prospectos
-            }}
-        >
-        {props.children}
-        </prospectProviders.Provider>
+  const getDataIdProspecto = (idProspect, setDataIdProspecto) => {
+    methods.getProspectById(idProspect, setDataIdProspecto)
+  }
+  // Save prospect
+  const handledSaveProspect = (data) => {
+    methods.saveprospect(data);
+    getAllProspects();
+  }
+  // Update prospect
+  const handledUpdateProspect = (data, idProspecto) => {
+    methods.updateProspect(data, idProspecto);
+    getAllProspects();
+  }
+  return (
+    <prospectProviders.Provider
+      value={{
+        getAllProspects,
+        resProspectos,
+        prospectos,
+        getDataIdProspecto,
+        handledSaveProspect,
+        handledUpdateProspect,
+        sethandleShowModal,
+        handleShowModal,
+      }}
+    >
+      {props.children}
+    </prospectProviders.Provider>
 
-)
+  )
 }
 
 // Context Const

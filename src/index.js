@@ -7,9 +7,9 @@ import ProspectosProvider from './Firebase/ProspectosProvider';
 ReactDOM.render(
   <BrowserRouter>
     <ProspectosProvider>
-      <React.StrictMode>
+      {/* <React.StrictMode> */}
         <App />
-      </React.StrictMode>
+      {/* </React.StrictMode> */}
     </ProspectosProvider>
   </BrowserRouter>,
   document.getElementById('root')
