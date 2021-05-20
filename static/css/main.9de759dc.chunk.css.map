@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/Components/Tools/Modal/styles.css"],"names":[],"mappings":"AAAA,KACI,SAAU,CACV,wBACJ","file":"main.9de759dc.chunk.css","sourcesContent":[".mod{\n    width: 95%;\n    max-width: none !important;\n}"]}
