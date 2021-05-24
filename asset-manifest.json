@@ -1,20 +1,20 @@
 {
   "files": {
     "main.css": "/prospectos/static/css/main.9de759dc.chunk.css",
-    "main.js": "/prospectos/static/js/main.fa7ae9d8.chunk.js",
-    "main.js.map": "/prospectos/static/js/main.fa7ae9d8.chunk.js.map",
+    "main.js": "/prospectos/static/js/main.f248f776.chunk.js",
+    "main.js.map": "/prospectos/static/js/main.f248f776.chunk.js.map",
     "runtime-main.js": "/prospectos/static/js/runtime-main.acba8128.js",
     "runtime-main.js.map": "/prospectos/static/js/runtime-main.acba8128.js.map",
-    "static/js/2.74fbfe99.chunk.js": "/prospectos/static/js/2.74fbfe99.chunk.js",
-    "static/js/2.74fbfe99.chunk.js.map": "/prospectos/static/js/2.74fbfe99.chunk.js.map",
+    "static/js/2.f0c0b04f.chunk.js": "/prospectos/static/js/2.f0c0b04f.chunk.js",
+    "static/js/2.f0c0b04f.chunk.js.map": "/prospectos/static/js/2.f0c0b04f.chunk.js.map",
     "index.html": "/prospectos/index.html",
     "static/css/main.9de759dc.chunk.css.map": "/prospectos/static/css/main.9de759dc.chunk.css.map",
-    "static/js/2.74fbfe99.chunk.js.LICENSE.txt": "/prospectos/static/js/2.74fbfe99.chunk.js.LICENSE.txt"
+    "static/js/2.f0c0b04f.chunk.js.LICENSE.txt": "/prospectos/static/js/2.f0c0b04f.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.acba8128.js",
-    "static/js/2.74fbfe99.chunk.js",
+    "static/js/2.f0c0b04f.chunk.js",
     "static/css/main.9de759dc.chunk.css",
-    "static/js/main.fa7ae9d8.chunk.js"
+    "static/js/main.f248f776.chunk.js"
   ]
 }
