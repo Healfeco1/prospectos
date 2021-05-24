@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useLayoutEffect, useState } from 'react'
+import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import DataTable from 'react-data-table-component';
 import { prospectProviders } from '../../Firebase/ProspectosProvider';
 import Modal from '../Tools/Modal/Modal'
 import './index.css'
 
 export default function ProspectosList() {
-    const { prospectos, sethandleShowModal } = useContext(prospectProviders)
+    const { prospectos, sethandleShowModal, getAllProspects } = useContext(prospectProviders)
     const [idProspecto, setidProspecto] = useState()
     const [hideObservaciones, sethideObservaciones] = React.useState(false);
     const [data, setdata] = useState([prospectos][0])
@@ -14,9 +14,6 @@ export default function ProspectosList() {
     //     // return (prospectos[key])
     // })][0])][0]
     // const data = 
-    useLayoutEffect(() => {
-        setdata([prospectos][0])
-    }, [prospectos])
     const columns =[
         {
             name: 'Nombre del prospecto',
@@ -63,12 +60,22 @@ export default function ProspectosList() {
         rowsPerPageText: 'Filas por Página',
         rangeSeparatorText: "de",
         selectAllRowsItem: true,
-        selectAllRowsItemText: 'Todos'
+        selectAllRowsItemText: 'Todos',
     }
-    const table = <DataTable
+    useEffect(() => {
+        // getAllProspects()
+        // setdata([prospectos][0])
+    }, [])
+    useLayoutEffect(() => {
+        setdata([prospectos][0])
+    }, [prospectos])
+    
+    const table =
+     <DataTable
         title="Lista de Prospectos"
         columns={columns}
         data={data}
+        initalData={data}
         pagination
         paginationComponentOptions={paginacion}
         fixedHeader
@@ -78,10 +85,16 @@ export default function ProspectosList() {
         dense
         highlightOnHover
         onRowClicked={(rowData) => prospecto(rowData.id)}
+        noDataComponent= "No hay datos capturados"
     />
+    const dataTable = useRef(prospectos)
+    // useEffect(() => {
+    //     // data = [prospectos][0]
+    //     setdata([prospectos][0])
+    // }, [data])
     useEffect(() => {
         // data = [prospectos][0]
-        setdata([prospectos][0])
+        // setdata([prospectos][0])
     }, [data])
     //console.log(table.props.data);
 

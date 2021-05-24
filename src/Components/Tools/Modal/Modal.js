@@ -66,8 +66,15 @@ export default function Modals({ idProspecto, setidProspecto}) {
           }}
         dialogClassName="mod"
         aria-labelledby="example-custom-modal-styling-title"
+        keyboard={true}
+        backdrop="static"
+        // Impide utilizar la tecla esc
+        keyboard={false}
+        // Controla la vista del icono X en el modal
+        // closeButton={false}
       >
-        <Modal.Header closeButton>
+        {/* <Modal.Header closeButton > */}
+        <Modal.Header >
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -79,9 +86,9 @@ export default function Modals({ idProspecto, setidProspecto}) {
             />
           </ToastProvider>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>Close</Button>
-          <Button variant="primary" onClick={handleClose}>Save Changes</Button>
+        <Modal.Footer className="d-flex justify-content-center">
+          <Button variant="outline-danger" onClick={handleClose}>Salir</Button>
+          {/* <Button variant="primary" onClick={handleClose}>Save Changes</Button> */}
         </Modal.Footer>
       </Modal>
       <span>{(idProspecto) ? idProspecto : ''}</span>

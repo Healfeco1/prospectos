@@ -26,7 +26,7 @@ export default function ProspectosProvider(props) {
   // Update prospect
   const handledUpdateProspect = (data, idProspecto) => {
     methods.updateProspect(data, idProspecto);
-    getAllProspects();
+    
   }
   return (
     <prospectProviders.Provider

@@ -14,34 +14,6 @@ export const methods = {
                 }
             }
         })
-        // const loginList = [];
-        // const loginRef = firebase.database().ref('prospectos');
-        // loginRef.once('value')
-        // .then((prospectos)=>{
-        //     let todos = prospectos.val()
-        //     for(let i in todos){
-        //         // //console.log(todos[i]);
-        //         let prospectsObj = {... todos[i], ['id']: i} 
-        //         loginList.push(prospectsObj)
-        //         //console.log(prospectsObj);
-        //         setData(prospectsObj)
-        //     }
-        // })
-        // return loginList
-        // loginList.map(val => //console.log(val))
-        // //console.log(loginList);
-        // //console.log(loginList);
-        // return loginList
-
-        // firebase.firestore().collection('prospectos')
-        // .get()
-        // .then(res =>{
-        //     res.docs.map(prospectos => {
-        //         //console.log(prospectos);
-        //       let prospectsObj = {... prospectos.data(), ['id']: prospectos.id} 
-        //       prospects.push(prospectsObj)
-        //     });
-        // })
     },
     getProspectById: (idProspect, setDataIdProspecto) => {
         //console.log('getProspectById');
@@ -65,13 +37,79 @@ export const methods = {
         const logoutRef = firebase.database().ref(`/prospectos/${idProspect}`)
         Object.entries(data).map(val => {
             console.log(val);
-            logoutRef.update({[val[0]]:val[1]})
+            logoutRef.update({ [val[0]]: val[1] })
         })
     },
     saveprospect: (data) => {
-        console.log('saveMethod', data);
-        var usersRef = firebase.database().ref('prospectos');
         data.status = "Enviado"
-        usersRef.push(data)
+        let usersRef = firebase.database().ref('prospectos').push(data).key;
+        let id = usersRef
+        if (data.documentos) {
+            Object.values(data.documentos).map((value, key) => {
+                // let file = data.documentos[`documento${Math.round(keyIndex % 2)}`]
+                let file = value.documento
+                var storageRef = firebase.storage().ref();
+                let folderName = id + '/' + file.name
+                var uploadTask = storageRef.child(folderName).put(file);
+
+                uploadTask.on('', function (snapshot) {
+                }, function (error) {
+                }, function () {
+                    uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
+                        console.log('File available at', downloadURL);
+                        const url = firebase.database().ref('prospectos/' + id + '/documentos/' + key +'/documento')
+                        url.set(
+                            downloadURL
+                        );
+                    })
+                })
+            })
+        }
     }
 }
+
+/**
+let documentoRef = `documento${(Math.round(keyIndex % 2) - 1)}`
+                console.log("keyName: ", keyName, 'documentoRef: ', documentoRef);
+                console.log(keyName == documentoRef);
+                if (keyName == documentoRef) {
+                    alert(keyName == documentoRef);
+                    // let file = data.documentos[`documento${Math.round(keyIndex % 2)}`]
+                    let file = data.documentos[keyName]
+                    console.log('file: ', file);
+                    // let file = keyName
+                    alert(keyName);
+                    alert(file);
+                    var storageRef = firebase.storage().ref();
+                    let folderName = id + '/' + file.name
+                    var uploadTask = storageRef.child(folderName).put(file);
+                    // let referenceURL = storageRef.child(folderName);
+                    // referenceURL.snapshot.ref.getDownloadURL().then((downloadURL)=>{
+                    //     console.log(downloadURL);
+                    // })
+
+                    uploadTask.on('', function (snapshot) {
+                    }, function (error) {
+                    }, function () {
+                        uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
+                            console.log('File available at', downloadURL);
+                            //   data.documentos[keyName] = downloadURL
+                            // var updates = {};
+                            // updates['prospectos/' + id] = data;
+                            alert('msg1');
+                            const url = firebase.database().ref('prospectos/' + id + '/documentos/' + keyName)
+                            // url.set({
+                            url.set(
+                                // [documentos]: [keName=downloadURL]
+                                // 'documentos': {
+                                    // [`${keyName}`]: downloadURL
+                                    downloadURL
+                                // }
+                            );
+
+                            // const logoutRef = firebase.database().ref(`/${ref}/${idSesion}`)
+                            // logoutRef.update({ login: 'false' })
+                        })
+                    })
+                }
+ */

@@ -16,6 +16,6 @@ function App() {
           <ProspectosList />
     </>
   );
-}
 
+}
 export default App;
