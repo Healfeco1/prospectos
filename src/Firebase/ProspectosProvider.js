@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 // intermediario entre firebase y componentes
 import { methods } from './methods'
-import firebase from 'firebase'
 
 
 export default function ProspectosProvider(props) {
   const [prospectos, setData] = useState([])
   const [handleShowModal, sethandleShowModal] = useState(false);
+  const [titleModal, setTitleModal] = useState()
+  const [prospectoAccion, setProspectoAccion] = useState()
   let resProspectos = []
   const getAllProspects = () => {
     methods.prospectos(setData);
@@ -20,14 +21,34 @@ export default function ProspectosProvider(props) {
   }
   // Save prospect
   const handledSaveProspect = (data) => {
-    methods.saveprospect(data);
-    getAllProspects();
+    methods.saveprospect(data, 'update');
+    getAllProspects()
   }
   // Update prospect
   const handledUpdateProspect = (data, idProspecto) => {
     methods.updateProspect(data, idProspecto);
-    
+
   }
+  const setModalTitleName = (accion) => {
+    switch (accion) {
+      case 'visualizar':
+        setTitleModal("DATOS DEL PROSPECTO")
+        break;
+      case 'evaluar':
+        setTitleModal("EVALUACIÓN DEL PROSPECTO")
+        break;
+      case 'nuevo':
+        setTitleModal("CAPTURA DE NUEVO PROSPECTO")
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  useEffect(() => {
+    setModalTitleName(prospectoAccion)
+  }, [prospectoAccion])
   return (
     <prospectProviders.Provider
       value={{
@@ -39,6 +60,9 @@ export default function ProspectosProvider(props) {
         handledUpdateProspect,
         sethandleShowModal,
         handleShowModal,
+        titleModal,
+        prospectoAccion,
+        setProspectoAccion,
       }}
     >
       {props.children}

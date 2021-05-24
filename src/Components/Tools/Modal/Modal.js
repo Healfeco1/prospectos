@@ -16,38 +16,45 @@ export const MyCustomToastContainer = props => (
   <DefaultToastContainer {...props} style={{ zIndex: 9999 }} />
 );
 
-export default function Modals({ idProspecto, setidProspecto}) {
-  const {handleShowModal,sethandleShowModal} = useContext(prospectProviders)
+export default function Modals({ idProspecto, setidProspecto }) {
+  const { handleShowModal, sethandleShowModal, titleModal, prospectoAccion, setProspectoAccion } = useContext(prospectProviders)
   const [show, setShow] = useState(false);
   const handleClose = () => {
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        cancelButton: 'btn btn-success',
-        confirmButton: 'btn btn-danger mr-2'
-      },
-      buttonsStyling: false
-    })
+    if (prospectoAccion == 'nuevo') {
+      const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          cancelButton: 'btn btn-success',
+          confirmButton: 'btn btn-danger mr-2'
+        },
+        buttonsStyling: false
+      })
 
-    swalWithBootstrapButtons.fire({
-      title: 'Saldrá de la pantalla de captura de prospectos y ningún dato será guardado',
-      text: 'Si sale perderá toda la captura.',
-      icon: 'warning',
-      showClass: {
-        popup: 'animate__animated animate__fadeInDown'
-      },
-      showCancelButton: true,
-      confirmButtonText: 'Salir',
-      cancelButtonText: 'Seguir editando',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // setShow(false)
-        sethandleShowModal(false)
-        setidProspecto(null)
-      }
-    })
+      swalWithBootstrapButtons.fire({
+        title: 'Saldrá de la pantalla de captura de prospectos y ningún dato será guardado',
+        text: 'Si sale perderá toda la captura.',
+        icon: 'warning',
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Salir',
+        cancelButtonText: 'Seguir editando',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // setShow(false)
+          sethandleShowModal(false)
+          setidProspecto(null)
+        }
+      })
+    } else {
+      sethandleShowModal(false)
+      setidProspecto(null)
+    }
+
   };
   const handleShow = () => {
     // setShow(true)
+    setProspectoAccion("nuevo")
     sethandleShowModal(true)
   };
   return (
@@ -61,28 +68,26 @@ export default function Modals({ idProspecto, setidProspecto}) {
         show={handleShowModal}
         onHide={() => {
           // setShow(false); 
-          sethandleShowModal(false); 
+          sethandleShowModal(false);
           setidProspecto(null)
-          }}
+        }}
         dialogClassName="mod"
         aria-labelledby="example-custom-modal-styling-title"
-        keyboard={true}
         backdrop="static"
         // Impide utilizar la tecla esc
-        keyboard={false}
-        // Controla la vista del icono X en el modal
-        // closeButton={false}
+        keyboard={ prospectoAccion == 'nuevo' ? false : true}
+      // Controla la vista del icono X en el modal
+        closeButton={false}
       >
         {/* <Modal.Header closeButton > */}
-        <Modal.Header >
-          <Modal.Title>Modal heading</Modal.Title>
+        <Modal.Header className="d-flex justify-content-center">
+          <Modal.Title>{titleModal}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <ToastProvider components={{ ToastContainer: MyCustomToastContainer }}>
-            <Prospectos idProspecto={idProspecto} 
-            // setShow={setShow} 
-            sethandleShowModal={sethandleShowModal}
-            
+            <Prospectos idProspecto={idProspecto}
+              // setShow={setShow} 
+              sethandleShowModal={sethandleShowModal}
             />
           </ToastProvider>
         </Modal.Body>

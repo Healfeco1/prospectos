@@ -3,17 +3,16 @@ import DataTable from 'react-data-table-component';
 import { prospectProviders } from '../../Firebase/ProspectosProvider';
 import Modal from '../Tools/Modal/Modal'
 import './index.css'
+import { methods } from '../../Firebase/methods';
+import firebase from 'firebase'
+import Button from 'react-bootstrap/Button'
 
 export default function ProspectosList() {
-    const { prospectos, sethandleShowModal, getAllProspects } = useContext(prospectProviders)
+    const { prospectos, sethandleShowModal, setProspectoAccion, } = useContext(prospectProviders)
     const [idProspecto, setidProspecto] = useState()
     const [hideObservaciones, sethideObservaciones] = React.useState(false);
-    const [data, setdata] = useState([prospectos][0])
-    // const test =[([Object.keys(prospectos).map(key => {
-    //     console.log(prospectos[key].observaciones);
-    //     // return (prospectos[key])
-    // })][0])][0]
-    // const data = 
+    const [data, setdata] = useState([])
+
     const columns =[
         {
             name: 'Nombre del prospecto',
@@ -51,8 +50,13 @@ export default function ProspectosList() {
             //   right: true,
             center: true,
         },
+        {
+            name: 'Acciones',
+            cell: row => <Button variant="outline-success btn-sm mr-2" onClick={() => prospecto(row.id, 'evaluar')}>Evaluar</Button>,
+          },
     ];
-    const prospecto = (e) => {
+    const prospecto = (e, accion) => {
+        setProspectoAccion(accion)
         setidProspecto(prev => (e))
         sethandleShowModal(true)
     }
@@ -62,12 +66,9 @@ export default function ProspectosList() {
         selectAllRowsItem: true,
         selectAllRowsItemText: 'Todos',
     }
-    useEffect(() => {
-        // getAllProspects()
-        // setdata([prospectos][0])
-    }, [])
     useLayoutEffect(() => {
         setdata([prospectos][0])
+        methods.dataTable(setdata, '');
     }, [prospectos])
     
     const table =
@@ -75,7 +76,7 @@ export default function ProspectosList() {
         title="Lista de Prospectos"
         columns={columns}
         data={data}
-        initalData={data}
+        // initalData={data}
         pagination
         paginationComponentOptions={paginacion}
         fixedHeader
@@ -84,24 +85,14 @@ export default function ProspectosList() {
         subHeader
         dense
         highlightOnHover
-        onRowClicked={(rowData) => prospecto(rowData.id)}
+        onRowClicked={(rowData) => prospecto(rowData.id, 'visualizar')}
         noDataComponent= "No hay datos capturados"
+        defaultPageSize={2}
     />
-    const dataTable = useRef(prospectos)
-    // useEffect(() => {
-    //     // data = [prospectos][0]
-    //     setdata([prospectos][0])
-    // }, [data])
-    useEffect(() => {
-        // data = [prospectos][0]
-        // setdata([prospectos][0])
-    }, [data])
-    //console.log(table.props.data);
-
+    // const dataTable = useRef(prospectos)
     return (
         <>
             {table}
-            {/* <Modal dataprospecto={dataprospecto.id}/> */}
             <Modal idProspecto={idProspecto} setidProspecto={setidProspecto} />
         </>
     )

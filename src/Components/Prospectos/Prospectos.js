@@ -8,7 +8,7 @@ import { IconContext } from "react-icons";
 import Button from 'react-bootstrap/Button'
 
 export default function Prospectos({ idProspecto, sethandleShowModal }) {
-    const { getDataIdProspecto, handledSaveProspect, handledUpdateProspect } = useContext(prospectProviders)
+    const { getDataIdProspecto, handledSaveProspect, handledUpdateProspect, prospectoAccion } = useContext(prospectProviders)
     // Get data 
     const [dataIdProspecto, setDataIdProspecto] = useState({
         nombreProspecto: '',
@@ -35,35 +35,17 @@ export default function Prospectos({ idProspecto, sethandleShowModal }) {
     // Save the document to create Form documents inputs 
     const [documentos, setDocumentos] = useState([])
     const [documentos1, setDocumentos1] = useState([])
-    // const validate = values => {
-    //     const errors = {};
-    //     if (!values.nombreProspecto) {
-    //         errors.values.nombreProspecto = 'Required';
-    //     }
-    //     // } else if (values.length < 1) {
-    //     //     errors.values = 'Must be 15 characters or less';
-    //     // }
-    // };
+
     const [arr, setArr] = useState([])
-    // //console.log('Prospectos', idProspecto);
     useEffect(() => {
         if (idProspecto) {
-            // alert(idProspecto);
-            // let res = getDataIdProspecto(idProspecto,setDataIdProspecto)
             getDataIdProspecto(idProspecto, setDataIdProspecto)
-            // //console.log(dataIdProspecto);
-            // dataIdProspecto.documento0 ? 
-            // })
         }
     }, [])
     const validated = val => {
         addToast(`Capturar todos los campos con '*' son obligatorios`, { appearance: 'error', autoDismiss: true })
     }
     const HideModal = (values, resetForm, idProspecto) => {
-        // setDataIdProspecto(...dataIdProspecto, values)
-        // console.log('dataIdProspecto: ',dataIdProspecto);
-
-        // alert(JSON.stringify(documentos));
         values = { ...values, 'documentos': documentos1 }
         // idProspecto ? handledUpdateProspect(updateDatas, idProspecto) : handledSaveProspect(values)
         handledSaveProspect(values)
@@ -216,7 +198,8 @@ export default function Prospectos({ idProspecto, sethandleShowModal }) {
                             <label htmlFor="status" className="mr-2">Estatus</label>
                             <Field name="status" type="text" className={`text-white text-center ${dataIdProspecto.status == 'Autorizado' ? 'bg-success' : dataIdProspecto.status == 'Rechazado' ? 'bg-danger' : dataIdProspecto.status == 'Enviado' ? 'bg-secondary' : ''}`} disabled />
                         </div>
-                        {dataIdProspecto.status != '' && dataIdProspecto.status == 'Enviado' ?
+                        {/* {dataIdProspecto.status != '' && dataIdProspecto.status == 'Enviado' ? */}
+                        {prospectoAccion == 'evaluar' ?
                             <div className="col-md-8">
                                 <Button variant="outline-success btn-sm mr-2" onClick={() => handleAtorizar()}>Autorizar</Button>
                                 <Button variant="outline-danger btn-sm" onClick={() => handleRechazar()}>Rechazar</Button>
@@ -284,7 +267,8 @@ export default function Prospectos({ idProspecto, sethandleShowModal }) {
                                             <ErrorMessage name={`documentoName${id}`} component="span" className="text-danger" />
                                         </div>
                                         <div className="col-md-5 mt-3">
-                                            <Field name={`documento${id}`} type="file" className="form-control-file" onBlur={e => fieldChanges(e)} onChange={(e) => console.log("file: ", e.target.value)} />
+                                            <Field name={`documento${id}`} type="file" className="form-control-file" onChange={e => {setTimeout(e.target.select.bind(fieldChanges(e)))}}/>
+                                            {/* <input name={`documento${id}`} type="file" className="form-control-file" onChange={e => {setTimeout(e.target.select.bind(fieldChanges(e)))}}/> */}
                                             <ErrorMessage name={`documento${id}`} component="span" className="text-danger" />
                                         </div>
                                     </span>
@@ -300,15 +284,13 @@ export default function Prospectos({ idProspecto, sethandleShowModal }) {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {Object.values(dataIdProspecto.documentos).map(value => {
+                                            {Object.values(dataIdProspecto.documentos).map((value,key) => {
                                                 return(
-                                                    <tr> 
+                                                    <tr key={key}> 
                                                         <td>{value.nombre}</td>
                                                         <td><a href={value.documento} target="_blank"><span className="text-dark">{value.documento}</span></a></td>
                                                     </tr>
                                                 )
-                                                {/* if (key == 'documentos') { */}
-                                                {/* } */}
                                             })
                                             }
                                         </tbody>
@@ -316,7 +298,7 @@ export default function Prospectos({ idProspecto, sethandleShowModal }) {
                                 </span>
                                 : ''}
                         </div>
-                        {dataIdProspecto.status != '' ?
+                        {prospectoAccion == 'evaluar' ?
                             <div className="col-md-12 mb-3">
                                 <label htmlFor="observaciones">Observaciones<b className="text-danger">*</b></label>
                                 <Field name="observaciones" type="text" className="form-control" onBlur={e => fieldChanges(e)} required />
